@@ -1,0 +1,15 @@
+export const screenMap = {
+  SplashScreen: 'SpalashScreen',
+  Authentication: 'Authentication',
+  SignUP:'SignUp',
+  Home: 'Home',
+  NewTodo: 'NewTodo',
+  UpdateTodo: 'UpdateTodo',
+  Onboarding: 'Onboarding',
+  SampleCode: 'SampleCode',
+  ApprovalCenter: 'ApprovalCenter',
+  Profile: 'Profile',
+  Book: 'Book',
+  SystemServices: 'SystemServices',
+  OptionsMore: 'OptionsMore', 
+};
