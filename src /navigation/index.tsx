@@ -18,7 +18,7 @@ const AppContainer = () => {
             headerShown: false,
           }}>
           <RootStack.Screen name={screenMap.SplashScreen} component={AuthNavigation}/>
-          <RootStack.Screen name={screenMap.ApprovalCenter} component={MainNavigation} />
+          <RootStack.Screen name={screenMap.Subscription} component={MainNavigation} />
           <RootStack.Screen name={screenMap.Home} component={BottomNavigation} />
         </RootStack.Navigator>
       </NavigationContainer>

@@ -80,6 +80,7 @@ export default function Profile ({ navigation}: any)  {
             const response = await ServiceMaster.uploadImage(id, imageData)
             console.log('API Response:', response);
             Alert.alert('Success', 'Image uploaded successfully');
+
             setLoading(false); 
           } catch (error) {
             console.error('Error uploading image:', error);
@@ -112,7 +113,6 @@ export default function Profile ({ navigation}: any)  {
       const response =  await ServiceMaster.updateProfileData(id,data)
       console.log('API Response:', response);
         // Refetch the profile data after update
-      await getAllProfileData();
 
     setLoading(false);
     Alert.alert('Profile Updated', 'Your profile has been updated successfully!');
@@ -142,7 +142,6 @@ export default function Profile ({ navigation}: any)  {
      
     }catch(error) {
       setLoading(false);
-      Alert.alert('Account Delete', 'Your Delete filed!');
     } 
   };
 

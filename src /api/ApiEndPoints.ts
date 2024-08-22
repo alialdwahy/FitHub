@@ -6,7 +6,10 @@
 
 const APIENDPOINTS = {
 
-
+   // baseurl
+  PROD_BASEURL: "",
+  // Api urls
+  
   SESSION_DIGEST: 'auth/signIn', 
   SESSION_LOGOUT: 'auth/signOut', 
   SIGN_UP: 'auth/signUp',

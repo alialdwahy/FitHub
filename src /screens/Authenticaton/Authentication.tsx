@@ -12,6 +12,7 @@ import ServiceMaster from '../../api/networkApi/ServiceMaster';
 import {app_logo} from '../../assets/icons/svg/app_logo';
 import LottieView from 'lottie-react-native';
 import { Images } from '../../assets';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -39,16 +40,19 @@ const Authentication = ({ navigation}: any ) => {
   const handlingLogin = async () => {
     setLoading(true); 
           // navigation.navigate('Home');
-          let data = {
+          let dataSend = {
             "email": email,
             "password": password
           }
-          console.log('data test-', data)
+          console.log('data test-', dataSend)
           try {
-            const response =  await ServiceMaster.getLogIn(data)
+            const response =  await ServiceMaster.getLogIn(dataSend)
+            const data = response[1]; // Adjust if response structure is different
+           const token = data?.data?.token;
+           await AsyncStorage.setItem('token',token)
             console.log('logo test login ------> ', response)
             
-setLoading(false);
+            setLoading(false);
           Alert.alert('Login Successful', 'You have successfully logged in!', [
             {
               text: 'OK',

@@ -1,4 +1,6 @@
 import Classes from "../screens/ClassesFit/Classes";
+import Payment from "../screens/Subscription/Payment";
+import Subscription from "../screens/Subscription/Subscription";
 
 export const screenMap = {
   SplashScreen: 'SpalashScreen',
@@ -9,9 +11,9 @@ export const screenMap = {
   UpdateTodo: 'UpdateTodo',
   Onboarding: 'Onboarding',
   SampleCode: 'SampleCode',
-  ApprovalCenter: 'ApprovalCenter',
+  Payment: 'Payment',
   Profile: 'Profile',
-  Book: 'Book',
+  Subscription: 'Subscription',
   Address: 'Address',
   Classes: 'Classes', 
 };

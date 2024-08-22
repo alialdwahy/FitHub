@@ -18,6 +18,7 @@ import { COLORS } from '../constant/theme';
 import Profile from '../screens/Profile/Profile';
 import Address from '../screens/Address/Address';
 import Classes from '../screens/ClassesFit/Classes';
+import Subscription from '../screens/Subscription/Subscription';
 
 
 const AuthStack = createNativeStackNavigator();
@@ -54,6 +55,7 @@ const MainNavigation = () => {
         <MainStack.Screen name={screenMap.Home} component={Home} />
         <MainStack.Screen name={screenMap.Profile} component={Profile} />
         <MainStack.Screen name={screenMap.Address} component={Address} />
+        <MainStack.Screen name={screenMap.Subscription} component={Subscription} />
         <MainStack.Screen
           name={screenMap.Classes}
           component={Classes}
@@ -154,7 +156,7 @@ const TabBar = ({ state, descriptors, navigation } : any) => {
 
         <Tab.Screen
           name="ic_subscrip"
-          component={ApprovalCenter}
+          component={Subscription}
           options={{
             tabBarShowLabel: false,
             headerShown: false
