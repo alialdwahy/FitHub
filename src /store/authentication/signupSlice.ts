@@ -1,6 +1,6 @@
 import {createSlice, nanoid} from '@reduxjs/toolkit';
 import SignUpStore from './signupStore';
-import { ProfileItemType, SignUpItemType } from '../../types/genericTypes';
+import { ProfileItemType, SignUpItemType, UploadImageItemType } from '../../types/genericTypes';
 
 
 
@@ -12,12 +12,23 @@ export const signUpSlice = createSlice({
     ...initialState,
     isLoading: true,
     isError: false,
+
   }, 
   reducers: {
     createSignUp: (state, action: {payload: { name: string, username: string, email: string, password: string,}; type: string}) => {
         state.signUp = state.signUp.concat([
           {id: nanoid(),name: action.payload.name,username: action.payload.username,email: action.payload.email,password: action.payload.password,},
         ]);
+      },
+      uploadImage: (state, action: {payload: UploadImageItemType; type: string}) => {
+        state.uploadImage = state.uploadImage.map((uploadItem: UploadImageItemType) => {
+          if (uploadItem.id === action.payload.id) {
+              uploadItem.attachment = action.payload.attachment;
+              return uploadItem;
+          }
+          return uploadItem;
+        });
+        state.uploadImage.concat([action.payload]);
       },
       updateProfile: (state, action: {payload: ProfileItemType; type: string}) => {
         state.profileData = state.profileData.map((profileItem: ProfileItemType) => {
@@ -33,6 +44,8 @@ export const signUpSlice = createSlice({
           return profileItem;
         });
         state.profileData.concat([action.payload]);
+        console.log('updata---->>test',state.profileData)//
+
       },
       deleteProfile: (state, action: {payload: {id: string}; type: string}) => {
         state.profileData = state.profileData.filter(
@@ -45,7 +58,7 @@ export const signUpSlice = createSlice({
       ) => {
         
         state.profileData = state.profileData.concat(action.payload);
-        // console.log('identificationNumber---->>test',state.profileData)
+        //  console.log('identificationNumber---->>test',state.profileData)//
          state.isLoading = false
       },
       fetchProfileDataError: (
@@ -58,14 +71,15 @@ export const signUpSlice = createSlice({
     },
 });
 
-const {createSignUp, updateProfile, deleteProfile,fetchProfileData,fetchProfileDataError} = signUpSlice.actions;
+const {createSignUp, updateProfile, deleteProfile,fetchProfileData,fetchProfileDataError,uploadImage} = signUpSlice.actions;
 
 export const signUpAction = {
     createSignUp,
     updateProfile,
     deleteProfile,
     fetchProfileData,
-    fetchProfileDataError
+    fetchProfileDataError,
+    uploadImage
 };
 
 export default signUpSlice.reducer;

@@ -9,6 +9,8 @@ const SignUpStore: SignUpStateTypes = {
   profileData:[
 
   ],
+  uploadImage: [],
+
 
 
   creatingSignUp: false,

@@ -6,13 +6,14 @@
 
 const APIENDPOINTS = {
 
- 
-  // Api urls
+
   SESSION_DIGEST: 'auth/signIn', 
   SESSION_LOGOUT: 'auth/signOut', 
   SIGN_UP: 'auth/signUp',
   PROFILE: 'member/profile',
-  UPDATE_PROFILE: 'member/1'
+  UPDATE_PROFILE: 'member',
+  DELETE_PROFILE: 'auth/user',
+  UPLOAD_IMAGE: 'member'
 };
 
 export default APIENDPOINTS;

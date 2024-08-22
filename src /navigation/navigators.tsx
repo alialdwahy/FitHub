@@ -10,15 +10,16 @@ import {
   SplashScreen,
   Onboarding,
   ApprovalCenter,
-  News,
-  SystemServices,
-  OptionsMore
 } from '../screens'; 
 import { Image, StyleSheet, View } from 'react-native';
 import SignUp from '../screens/Authenticaton/SignUp';
 import TabBarButton from '../components/TabBarButton';
 import { COLORS } from '../constant/theme';
 import Profile from '../screens/Profile/Profile';
+import Address from '../screens/Address/Address';
+import Classes from '../screens/ClassesFit/Classes';
+
+
 const AuthStack = createNativeStackNavigator();
 const MainStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator(); 
@@ -52,10 +53,10 @@ const MainNavigation = () => {
       >
         <MainStack.Screen name={screenMap.Home} component={Home} />
         <MainStack.Screen name={screenMap.Profile} component={Profile} />
-        <MainStack.Screen name={screenMap.ApprovalCenter} component={ApprovalCenter} />
+        <MainStack.Screen name={screenMap.Address} component={Address} />
         <MainStack.Screen
-          name={screenMap.SystemServices}
-          component={SystemServices}
+          name={screenMap.Classes}
+          component={Classes}
         />
       </MainStack.Navigator>
     );
@@ -129,26 +130,34 @@ const TabBar = ({ state, descriptors, navigation } : any) => {
           options={{
             tabBarShowLabel: false,
             headerShown: false
-           
           }}
         />
+
         <Tab.Screen
           name="ic_classs"
-          component={SystemServices}
+          component={Classes}
           options={{
             tabBarShowLabel: false,
             headerShown: false
-      
           }}
         />
-  
+          
+          <Tab.Screen
+          name="ic_address"
+          component={Address}
+          options={{
+            tabBarShowLabel: false,
+            headerShown: false
+          }}
+        />
+
+
         <Tab.Screen
           name="ic_subscrip"
           component={ApprovalCenter}
           options={{
             tabBarShowLabel: false,
             headerShown: false
-           
           }}
         />
         
@@ -159,9 +168,10 @@ const TabBar = ({ state, descriptors, navigation } : any) => {
           options={{
             tabBarShowLabel: false,
             headerShown: false
-            
           }}
         />
+
+
       </Tab.Navigator>
     );
   }

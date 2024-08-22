@@ -12,67 +12,166 @@ import { useDispatch } from 'react-redux';
 import ServiceMaster from '../../api/networkApi/ServiceMaster';
 import { ProfileItemType } from '../../types/genericTypes'; 
 import useUserController from '../../view-controller/useUserController';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import APIENDPOINTS from '../../api/ApiEndPoints';
+import InputField from '../../components/LoginComponent/InputField';
 
-const Profile = () => {
+export default function Profile ({ navigation}: any)  {
 
-  const { profileData } = useUserController();
+  const { profileData ,updateProfile, uploadImage, getAllProfileData } = useUserController();
   const [dataAll, setDataAll] = useState<ProfileItemType| null>(null);
 
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [identificationNumber, setIdentificationNumber] = useState('');
-  const [gender, setGender] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(dataAll?.name || '');
+  const [firstName, setFirstName] = useState(dataAll?.firstName || '');
+  const [lastName, setLastName] = useState(dataAll?.lastName || '');
+  const [email, setEmail] = useState(dataAll?.email || '');
   const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState<null | number>(null);
   const [profileImage, setProfileImage] = useState('https://via.placeholder.com/100');
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+
   
     
   useEffect (() =>  {
     setLoading(true); 
     if (profileData) {
-
       setDataAll(profileData[0]); 
        setLoading(false); 
     }
-  }, [dispatch,profileData]);
+  }, [dispatch, profileData]);
 
-  console.log('dataAll --------->>>>>>', profileData)
+
+  // console.log('dataAll --------->>>>>>', profileData)
     
-
+  const handleGenderSelection = (selectedGender: string) => {
+    if (selectedGender === 'male') {
+      setGender(0); // 0 for male
+    } else if (selectedGender === 'female') {
+      setGender(1); // 1 for female
+    }
+  };
    
 
-  const handleImageUpload = () => {
-    launchImageLibrary({ mediaType: 'photo' }, response => {
+  const handleImageUpload = async() => {
+    setLoading(true); 
+    launchImageLibrary({ mediaType: 'photo' }, async response => {
       if (response.assets && response.assets.length > 0) {
         // setProfileImage(response.assets[0].uri);
+        const selectedImage = response.assets[0]; 
+        if (selectedImage && selectedImage.uri  && selectedImage.type) {
+          const imageData = {
+            uri: selectedImage.uri,
+            name: selectedImage.fileName || `photo_${Date.now()}.jpg`,
+            type: selectedImage.type,
+          };
+  
+          try {
+
+            const id = await AsyncStorage.getItem('id');
+            if (!id) {
+              throw new Error('User ID not found in storage');
+            }
+            setProfileImage(selectedImage.uri);
+            // await uploadImage({ id: id, attachment: imageData });
+            const response = await ServiceMaster.uploadImage(id, imageData)
+            console.log('API Response:', response);
+            Alert.alert('Success', 'Image uploaded successfully');
+            setLoading(false); 
+          } catch (error) {
+            console.error('Error uploading image:', error);
+            Alert.alert('Error', 'Failed to upload image');
+            setLoading(false); 
+          }
+        }else {
+          console.error('Image selection failed or invalid image data:', selectedImage);
+          Alert.alert('Error', 'Invalid image data, please try again.');
+        }
+  
       }
     });
   };
 
-  const handleUpdateProfile = () => {
-    // Update profile logic
+  const handleUpdateProfile = async () => {
+    // Update profile logic]  
+    setLoading(true); 
     setIsEditing(false);
     setModalVisible(false);
+    // navigation.navigate('Home');
+    let data = { name,email,gender, firstName,lastName, phone, }
+    console.log('Data to be sent:', data);
+    try {
+
+      const id = await AsyncStorage.getItem('id');
+      if (!id) {
+        throw new Error('User ID not found in storage');
+      }
+      const response =  await ServiceMaster.updateProfileData(id,data)
+      console.log('API Response:', response);
+        // Refetch the profile data after update
+      await getAllProfileData();
+
+    setLoading(false);
     Alert.alert('Profile Updated', 'Your profile has been updated successfully!');
+     
+    }catch(error) {
+      setLoading(false);
+      Alert.alert('Profile Updated', 'Your profile filed!');
+    } 
   };
+
+
+
+
+  const handleDeleteProfile = async () => {
+    setLoading(true); 
+    try {
+
+      const id = await AsyncStorage.getItem('id');
+      if (!id) {
+        throw new Error('User ID not found in storage');
+      }
+      const response =  await ServiceMaster.deleteProfileData(id)
+      console.log('API Response:', response);
+     setLoading(false);
+    Alert.alert('Account Delete', 'Your Account has been Deleted successfully!');
+    navigation.navigate('Authentication');
+     
+    }catch(error) {
+      setLoading(false);
+      Alert.alert('Account Delete', 'Your Delete filed!');
+    } 
+  };
+
+
+
 
   const handleLogOut = async () => {
     // Update profile logic
+    try {
     const response =  await ServiceMaster.getLogOut()
-    Alert.alert('Profile Updated', 'Your profile has been updated successfully!');
+    console.log('logo test login ------> ', response)  
+         setLoading(false);
+          Alert.alert('LogOut Successful', 'You have successfully logged Out!', [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Authentication'),
+            },
+          ]);
+          }catch(error) {
+            setLoading(false);
+          }
   };
  
-    console.log('test value ----> ',dataAll)
+    // console.log('test value ----> ',dataAll)
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleLogOut}>
           <SvgXml xml={ic_logout} width="30" height="40"  />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -109,7 +208,7 @@ const Profile = () => {
         <Text style={styles.icon} >Mobile:      </Text>
           <Text style={styles.contactText}>{dataAll?.phone}</Text>
         </View>
-        <TouchableOpacity style={styles.button} >
+        <TouchableOpacity style={styles.button} onPress={handleDeleteProfile} >
       <Text style={styles.buttonText}>Delete Account</Text>
     </TouchableOpacity>
       </View>
@@ -123,56 +222,51 @@ const Profile = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Edit Profile</Text>
-            <TextInput
-              style={styles.input}
+            <InputField
               value={name}
               onChangeText={setName}
               placeholder="Enter your name"
             />
-            <TextInput
-              style={styles.input}
+            <InputField
               value={firstName}
               onChangeText={setFirstName}
               placeholder="Enter your First Name"
             />
-            <TextInput
-              style={styles.input}
+            <InputField
               value={lastName}
               onChangeText={setLastName}
               placeholder="Enter your Last Name"
             />
             <View style={styles.radioContainer}>
-  <TouchableOpacity
-    style={styles.radioOption}
-    onPress={() => setGender('male')}
-  >
-    <View style={[
-      styles.radioCircle,
-      gender === 'male' && styles.radioCircleSelected
-    ]} />
-    <Text style={styles.radioText}>Male</Text>
-  </TouchableOpacity>
-  
-  <TouchableOpacity
-    style={styles.radioOption}
-    onPress={() => setGender('female')}
-  >
-    <View style={[
-      styles.radioCircle,
-      gender === 'female' && styles.radioCircleSelected
-    ]} />
-    <Text style={styles.radioText}>Female</Text>
-  </TouchableOpacity>
+            <TouchableOpacity
+        style={styles.radioOption}
+        onPress={() => handleGenderSelection('male')}
+      >
+        <View style={[
+          styles.radioCircle,
+          gender === 0 && styles.radioCircleSelected // check for 0 for male
+        ]} />
+        <Text style={styles.radioText}>Male</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity
+        style={styles.radioOption}
+        onPress={() => handleGenderSelection('female')}
+      >
+        <View style={[
+          styles.radioCircle,
+          gender === 1 && styles.radioCircleSelected // check for 1 for female
+        ]} />
+        <Text style={styles.radioText}>Female</Text>
+      </TouchableOpacity>
 </View>
-            <TextInput
-              style={styles.input}
+            <InputField
               value={email}
               onChangeText={setEmail}
               placeholder="Enter your email"
             />
-            <TextInput
-              style={styles.input}
-              value={phone}
+            <InputField
+              value={phone.toString()}
               onChangeText={setPhone}
               placeholder="Enter your mobile number"
             />
@@ -263,13 +357,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  input: {
-    width: '100%',
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
-    backgroundColor: '#f5f5f5',
-  },
+
   radioContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -317,4 +405,4 @@ const styles = StyleSheet.create({
  
 });
 
-export default Profile;
+

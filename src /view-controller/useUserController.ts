@@ -5,7 +5,7 @@ import useUserViewModel from "../view-models/useUserViewModel"
 
 const useUserController = () => {
 
-const { profileData } = useUserViewModel();
+const { profileData ,updateProfile, uploadImage, deleteProfile, getAllProfileData } = useUserViewModel();
 
 
 // console.log("Fetched Profile Data:", profileData);
@@ -13,7 +13,15 @@ const { profileData } = useUserViewModel();
 
 return {
    
-    profileData
+    profileData,
+
+    updateProfile,
+
+    uploadImage,
+
+    deleteProfile,
+
+    getAllProfileData
    
   };
 

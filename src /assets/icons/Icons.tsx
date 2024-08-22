@@ -9,6 +9,7 @@ import { ic_home } from "./svg/ic_home";
 import { ic_subscrip } from "./svg/ic_subscrip";
 import { ic_classs } from "./svg/ic_classs";
 import { ic_account } from "./svg/ic_account";
+import { ic_address } from "./svg/ic_address";
 
 
 
@@ -17,11 +18,11 @@ export type IconKeys = | 'ic_home'
 | 'ic_subscrip'
 | 'ic_classs'
 | 'ic_account'
-| 'ic_approvalcenter';
+| 'ic_address';
 
 const icons: Record<IconKeys, string> = {
     ic_home,
-    ic_approvalcenter,
+    ic_address,
     ic_subscrip,
     ic_classs,
     ic_account,

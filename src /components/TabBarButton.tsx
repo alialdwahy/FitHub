@@ -48,7 +48,7 @@ const TabBarButton = (props:TabBarButtonProps) => {
  
 
     const animatedBackgroundStyle = useAnimatedStyle(() => {
-        const backgroundColor = isFocused ? COLORS.colortabbar : 'transparent';
+        const backgroundColor = isFocused ? COLORS.colorPrim : 'transparent';
         const borderRadius = isFocused ? 40 : 0;
     
         return {

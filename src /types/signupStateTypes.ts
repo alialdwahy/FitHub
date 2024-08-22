@@ -1,9 +1,10 @@
-import { ProfileItemType, SignUpItemType } from "./genericTypes";
+import { ProfileItemType, SignUpItemType, UploadImageItemType } from "./genericTypes";
 
 export type SignUpStateTypes = {
   fetchingProfile: boolean;
   signUp: Array<SignUpItemType>;
   profileData: Array<ProfileItemType>;
+  uploadImage: Array<UploadImageItemType>
 
   creatingSignUp: boolean;
   createSignUpSuccess: boolean;

@@ -1,3 +1,5 @@
+import Classes from "../screens/ClassesFit/Classes";
+
 export const screenMap = {
   SplashScreen: 'SpalashScreen',
   Authentication: 'Authentication',
@@ -10,6 +12,6 @@ export const screenMap = {
   ApprovalCenter: 'ApprovalCenter',
   Profile: 'Profile',
   Book: 'Book',
-  SystemServices: 'SystemServices',
-  OptionsMore: 'OptionsMore', 
+  Address: 'Address',
+  Classes: 'Classes', 
 };

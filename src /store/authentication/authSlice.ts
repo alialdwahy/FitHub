@@ -22,14 +22,24 @@ export const loginSlice = createSlice({
     ) =>{
         state.loginData = action.payload,
         state.isError = !action.payload.success;
-    }
+    },
+
+    endSessionDigestData: (
+      state,
+      action: {payload: LoginReponseItemType; type: string}
+
+  ) =>{
+      state.loginData = action.payload,
+      state.isError = !action.payload.success;
+  }
   }, 
 });
 
-const {getSessionDigestData} = loginSlice.actions;
+const {getSessionDigestData, endSessionDigestData} = loginSlice.actions;
 
 export const loginAction = {
     getSessionDigestData,
+    endSessionDigestData
 };
 
 export default loginSlice.reducer;

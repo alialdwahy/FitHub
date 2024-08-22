@@ -8,14 +8,27 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const useUserViewModel = () => {
   const dispatch = useDispatch();
   const profileData = useSelector((state: StoreType) => state.signUp.profileData);
+  
+  const {
+   updatingProfile,
+    updateProfileSuccess,
+    updateProfileError,
+    creatingSignUp,
+    createSignUpError,
+    createSignUpSuccess,
+    fetchingProfile,
+    deletingProfile,
+    deleteProfileError,
+    deleteProfileSuccess,
+    
+  } = useSelector((state: StoreType) => state.signUp);
+  const { fetchProfileData, fetchProfileDataError, updateProfile,  deleteProfile, uploadImage } = signUpAction;
 
-  const { fetchProfileData, fetchProfileDataError, updateProfile,  deleteProfile } = signUpAction;
 
-  useEffect(() => {
     const getAllProfileData = async () => {
       try {
         const res = await ServiceMaster.getProfileData();
-        console.log("API Response:", res);
+        // console.log("API Response:", res);
 
         if (res && res[1]?.success) {
           const profileData = res[1]?.data;
@@ -32,7 +45,7 @@ const useUserViewModel = () => {
             name: profileData.firstName + ' ' + profileData.lastName,
             username: profileData?.createdBy?.username || 'unknown'
           };
-          
+          await AsyncStorage.setItem('id',profileData.id.toString())
           // console.log('Profile Object to Dispatch:', profile);
           dispatch(fetchProfileData(profile));
         } else {
@@ -43,22 +56,34 @@ const useUserViewModel = () => {
         dispatch(fetchProfileDataError(true));
       }
     };
-
+    useEffect(() => {
     getAllProfileData();
   }, [dispatch, fetchProfileData, fetchProfileDataError]);
     
-
+  
 
 
   return {
     profileData,
 
-  //   updateProfile: (payload: {id: string; firstName: string,  lastName: string; gender: string, email: string; phone: number,name: string; username: string, identificationNumber:string,profilePicture:string }) =>
-  //     dispatch(updateProfile(payload)),
-  //   updateProfile,
-  //   updateProfileSuccess,
-  //   updateProfileError,
+    getAllProfileData,
+
+    updateProfile: (payload: {id: string; firstName: string, lastName: string; gender: string, email: string; phone: number, name: string; username: string, identificationNumber: string, profilePicture: string }) =>
+      dispatch(updateProfile(payload)),
+    updateProfileSuccess,
+    updateProfileError,
+
+
+    uploadImage: (payload: {id: string; attachment: any, }) =>
+      dispatch(uploadImage(payload)),
+
+
+    deleteProfile: (id: string) =>
+       dispatch(deleteProfile({id})),
+    deleteProfileSuccess,
+    deleteProfileError,
   };
+
   
 };
 

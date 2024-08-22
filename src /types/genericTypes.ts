@@ -32,6 +32,11 @@ export type ProfileItemType = {
   profilePicture: string;
 };
 
+export type UploadImageItemType = {
+  id: string;
+  attachment: any;
+}
+
 export type LoginItemType = {
   email: string;
   pasword: string;
@@ -43,3 +48,27 @@ export type LoginReponseItemType = {
   message: string;
 }
 
+export type GymClass = {
+  id: string;
+  name: string;
+  description: string;
+  image: string; 
+  price: string; // URL to the image
+}
+
+
+export type Address  = {
+  id: string;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  image: string; // URL to the image
+}
+
+export type ResponseModel = {
+  data: any;
+  message: string;
+  status: string;
+  code: string
+}

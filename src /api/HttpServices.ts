@@ -22,6 +22,10 @@ instance.interceptors.request.use(async (config) => {
   if (sessionDigest) {
     config.headers.Authorization = `Bearer ${sessionDigest}`;
   }
+  if (config.data instanceof FormData) {
+    // FormData automatically sets the correct boundary
+    config.headers["Content-Type"] = 'multipart/form-data';
+  }
   return config;
 }, (error) => {
   return Promise.reject(error);
@@ -94,6 +98,7 @@ const requests = {
       .catch(errorResponse);
   },
   put: async (url: string, body: any, headers: any) => {
+    console.log(url)
     let reqHeaders = {
       headers: {
         ...headers,

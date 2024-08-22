@@ -46,6 +46,7 @@ const Authentication = ({ navigation}: any ) => {
           console.log('data test-', data)
           try {
             const response =  await ServiceMaster.getLogIn(data)
+            console.log('logo test login ------> ', response)
             
 setLoading(false);
           Alert.alert('Login Successful', 'You have successfully logged in!', [
@@ -56,6 +57,7 @@ setLoading(false);
           ]);
           }catch(error) {
             setLoading(false);
+            
           
           }
   };
