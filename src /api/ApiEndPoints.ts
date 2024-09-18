@@ -16,7 +16,13 @@ const APIENDPOINTS = {
   PROFILE: 'member/profile',
   UPDATE_PROFILE: 'member',
   DELETE_PROFILE: 'auth/user',
-  UPLOAD_IMAGE: 'member'
+  UPLOAD_IMAGE: 'member',
+  GET_CLASS: 'class-schedules',
+  GET_CLASS_Details: 'class-schedule',
+  CLASS_ENROLL: 'class-schedule/enroll'
+
+
+
 };
 
 export default APIENDPOINTS;

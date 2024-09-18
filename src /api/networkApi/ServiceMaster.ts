@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // Define an interface for credentials
-interface SignInCredentials {
+export interface SignInCredentials {
   email: string;
   password: string;
 }
@@ -110,8 +110,40 @@ formData.append('attachment', {
     'Content-Type': 'multipart/form-data',},
 });
     }
-  }
+  },
 
+
+  getClass: async () => {
+    if (await checkIfInternetIsConnected()) { 
+     return requests.get(APIENDPOINTS.PROD_BASEURL+APIENDPOINTS.GET_CLASS, null, null);
+    } else {
+      throw new Error('No internet connection'); 
+    }
+  },
+
+  getClassDetails: async (id: string,) => {
+    const url = `${APIENDPOINTS.PROD_BASEURL}${APIENDPOINTS.GET_CLASS_Details}/${id}`;
+    console.log("Fetching class details from URL:", url); 
+    if (await checkIfInternetIsConnected()) { 
+     return requests.get(url, null, null);
+    } else {
+      throw new Error('No internet connection'); 
+    }
+  },
+
+
+  classEnroll: async (id: string,) => {
+    const url = `${APIENDPOINTS.PROD_BASEURL}${APIENDPOINTS.CLASS_ENROLL}/${id}`;
+    if (await checkIfInternetIsConnected()) { 
+    return requests.post(url, null, null) 
+
+  }
+  else {
+    throw new Error('No internet connection');
+    
+  }
+},
+  
 };
 
 export default ServiceMaster;

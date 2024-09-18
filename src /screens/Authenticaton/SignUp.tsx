@@ -31,27 +31,33 @@ const SignUp = ({ navigation }: any) => {
     }
     setLoading(true); 
     // navigation.navigate('Home');
-    let data = {
+    let dataSend = {
       "name": name,
       "username":username,
       "email": email,
       "password": password
     }
-    console.log('data test-', data)
+    console.log('data test-', dataSend)
     try {
-      const response =  await ServiceMaster.getSignUp(data)
-      
-setLoading(false);
-    Alert.alert('Sign Up  Successful', 'You have successfully logged in!', [
-      {
-        text: 'OK',
-        onPress: () => navigation.navigate('Authentication'),
-      },
-    ]);
+      const response =  await ServiceMaster.getSignUp(dataSend)
+      const data = response?.[1]; 
+      console.log('logo test Sign Up ------> ', response)
+      const success = response?.[1]?.success;
+      const message = response?.[1]?.message || 'An unexpected error occurred';
+      setLoading(false);
+      if (success) {
+        Alert.alert('Sign Up  Successful', message);
+        navigation.navigate('Authentication');
+      } else {
+        Alert.alert('Error', message);
+      }
+  
+      setLoading(false);
     }catch(error) {
       setLoading(false);
-    
-    }
+      Alert.alert('Error', 'An error occurred while your account');
+
+    } 
   };
 
 

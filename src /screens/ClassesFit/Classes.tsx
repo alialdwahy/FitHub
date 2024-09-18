@@ -1,88 +1,88 @@
 // Classes.tsx
-import React from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Linking, Alert } from 'react-native';
-import { GymClass } from '../../types/genericTypes'; // Import the GymClass type
+import React, {useEffect, useState, useCallback} from 'react';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity,  RefreshControl, SafeAreaView, ScrollView } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS } from '../../constant';
-
-const classesData: GymClass[] = [
-  { id: '1', name: 'Yoga Class', description: 'A relaxing yoga session to improve flexibility.', image: 'https://via.placeholder.com/80', price: '$30' },
-  { id: '2', name: 'Spin Class', description: 'High-intensity cycling workout for cardio fitness.', image: 'https://via.placeholder.com/80', price: '$25' },
-  { id: '3', name: 'Pilates', description: 'Core strengthening exercises for improved posture.', image: 'https://via.placeholder.com/80', price: '$35' },
-  { id: '4', name: 'Zumba', description: 'Dance-based fitness class for a fun workout.', image: 'https://via.placeholder.com/80', price: '$20' },
-  { id: '5', name: 'HIIT', description: 'High-Intensity Interval Training for maximum calorie burn.', image: 'https://via.placeholder.com/80', price: '$40' },
-  { id: '6', name: 'CrossFit', description: 'Intense workout combining cardio, weightlifting, and bodyweight exercises.', image: 'https://via.placeholder.com/80', price: '$50' },
-  { id: '7', name: 'Boxing', description: 'Boxing workouts for strength and conditioning.', image: 'https://via.placeholder.com/80', price: '$45' },
-  { id: '8', name: 'Barre', description: 'Combination of ballet, Pilates, and yoga for a full-body workout.', image: 'https://via.placeholder.com/80', price: '$30' },
-  { id: '9', name: 'Kickboxing', description: 'Martial arts-inspired workout to build strength and endurance.', image: 'https://via.placeholder.com/80', price: '$35' },
-  { id: '10', name: 'Stretching', description: 'Guided stretching to improve flexibility and recovery.', image: 'https://via.placeholder.com/80', price: '$25' },
-  // Add more classes if needed
-];
-
-const handlePayment = (className: string, price: string) => {
-  Alert.alert(
-    'Subscribe and Pay',
-    `Do you want to subscribe to ${className} for ${price}?`,
-    [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Pay Now', onPress: () => handlePaymentOptions(className, price) },
-    ],
-    { cancelable: false }
-  );
-};
+import { useDispatch } from 'react-redux';
+import useClassController from '../../view-controller/useClassController';
+import { ClassItemType, RootStackParamList } from '../../types/genericTypes';
+import { useNavigation } from '@react-navigation/native';
+import { screenMap } from '../../navigation/screenMap';
 
 
-const handlePaymentOptions = (className: string, price: string) => {
-  Alert.alert(
-    'Payment Options',
-    `Choose your payment method for ${className} costing ${price}.`,
-    [
-      { text: 'Apple Pay', onPress: () => handleApplePay() },
-      { text: 'STC Pay', onPress: () => handleSTCPay() },
-      { text: 'Card Payment', onPress: () => handleCardPayment() },
-      { text: 'Cancel', style: 'cancel' },
-    ],
-    { cancelable: false }
-  );
-};
+
+type ClassesScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Classes'>;
 
 
-const handleApplePay = () => {
-  Alert.alert('Apple Pay', 'Apple Pay payment process is not implemented.');
-};
 
-const handleSTCPay = () => {
-  Alert.alert('STC Pay', 'STC Pay payment process is not implemented.');
-};
+export default function Classes( ): React.JSX.Element {
+  const dispatch = useDispatch();
+  const { classData, getAllClassData  } = useClassController();
+  const [dataAll, setDataAll] = useState<ClassItemType[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation<ClassesScreenNavigationProp>();
 
-const handleCardPayment = () => {
-  Alert.alert('Card Payment', 'Card payment process is not implemented.');
-};
+  
+  const handlePress = (id: string) => {
+    navigation.navigate('Subscription', {screen: 'ClassDetails', params: {id} } );
+    console.log('navigation ---------------------------------------->',id);
 
-export default function Classes(): React.JSX.Element {
-  const renderItem = ({ item }: { item: GymClass }) => (
-    <TouchableOpacity style={styles.item} onPress={() => handlePayment(item.name, item.price)}>
-      <Image source={{ uri: item.image }} style={styles.image} />
+
+  };
+
+    // Function to handle refreshing and calling API
+    const onRefresh = useCallback(() => {
+      setRefreshing(true);
+      getAllClassData()
+        .finally(() => setRefreshing(false));  // This ensures refreshing state is reset after API call
+    }, [getAllClassData]); 
+  
+    useEffect(() => {
+      setLoading(true);  
+      if (classData) {
+        setDataAll(classData);
+        setLoading(false);
+      }
+    }, [dispatch, classData, ]);
+
+  // console.log('data class ---------------> ', classData)
+  
+  const renderItem = ({ item }: { item: any }) => (
+    
+    <TouchableOpacity style={styles.item} onPress={() => handlePress(item?.id)} >
+    
+      <Image source={{ uri: item?.images }} style={styles.image} />
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text>{item.description}</Text>
-        <Text style={styles.price}>{item.price}</Text>
+        <Text style={styles.name}>{item?.name}</Text>
+        <Text>{item?.description}</Text>
+        <Text style={styles.price}>{item?.price} ريال</Text>
       </View>
     </TouchableOpacity>
+    
   );
 
-  return (
 
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>FitHub Classes</Text>
-        </View>
-        <FlatList
-          data={classesData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
+  return (
+    <SafeAreaView style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.scrollView}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <View style={styles.header}>
+        <Text style={styles.headerText}>FitHub Classes</Text>
       </View>
-  
+      
+      <FlatList
+        data={classData || []}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+        ListEmptyComponent={<Text>No classes available</Text>}
+      />
+    </ScrollView>
+  </SafeAreaView>
   );
 }
 
@@ -128,5 +128,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#4CAF50', // Green for price
     fontWeight: 'bold',
+  },
+  scrollView: {
+    paddingBottom: 20, // Adjust as needed
   },
 });

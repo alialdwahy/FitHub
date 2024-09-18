@@ -1,7 +1,8 @@
 import React from 'react'; 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 import { screenMap } from './screenMap';
 import {
@@ -10,6 +11,8 @@ import {
   SplashScreen,
   Onboarding,
   ApprovalCenter,
+  ClasseDetails,
+  PaymentScreen
 } from '../screens'; 
 import { Image, StyleSheet, View } from 'react-native';
 import SignUp from '../screens/Authenticaton/SignUp';
@@ -19,11 +22,16 @@ import Profile from '../screens/Profile/Profile';
 import Address from '../screens/Address/Address';
 import Classes from '../screens/ClassesFit/Classes';
 import Subscription from '../screens/Subscription/Subscription';
+import ClassDetails from '../screens/ClassesFit/ClasseDetails';
+import { RootStackParamList } from '../types/genericTypes';
+
+// import ClassDetails from '../screens/ClassesFit/ClasseDitels';
 
 
 const AuthStack = createNativeStackNavigator();
-const MainStack = createNativeStackNavigator();
+const MainStack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator(); 
+
 
 const AuthNavigation = () => {
     return (
@@ -46,20 +54,15 @@ const AuthNavigation = () => {
 const MainNavigation = () => {
    
     return (
-      <MainStack.Navigator
-        // initialRouteName={screenMap.Home}
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
+      <MainStack.Navigator >
         <MainStack.Screen name={screenMap.Home} component={Home} />
         <MainStack.Screen name={screenMap.Profile} component={Profile} />
         <MainStack.Screen name={screenMap.Address} component={Address} />
+        <MainStack.Screen name={screenMap.Classes} component={Classes}  />
         <MainStack.Screen name={screenMap.Subscription} component={Subscription} />
-        <MainStack.Screen
-          name={screenMap.Classes}
-          component={Classes}
-        />
+        <MainStack.Screen name="ClassDetails" component={ClassDetails} />
+        <MainStack.Screen name={screenMap.PaymentScreen} component={PaymentScreen} />
+       
       </MainStack.Navigator>
     );
 }

@@ -48,14 +48,25 @@ export type LoginReponseItemType = {
   message: string;
 }
 
-export type GymClass = {
+export type ClassItemType = {
   id: string;
   name: string;
   description: string;
-  image: string; 
-  price: string; // URL to the image
+  price: number; 
+  images: string ; // URL to the image
 }
 
+export type ClassDetailsItemType = {
+  id: string;
+  name: string;
+  teachername:string;
+  description: string;
+  price: number; 
+  images: string ; 
+  startDate: string;
+  endDate: string;
+
+}
 
 export type Address  = {
   id: string;
@@ -72,3 +83,15 @@ export type ResponseModel = {
   status: string;
   code: string
 }
+
+export type RootStackParamList = {
+  Home: undefined;
+  Profile: undefined;
+  Address: undefined;
+  Classes: undefined;
+  ClassesScreen: undefined;
+  Subscription: undefined;
+  ClassDetails: { id: string };
+  SettingsStack: undefined; 
+  PaymentScreen:{ id: string, price: string, className: string };
+};

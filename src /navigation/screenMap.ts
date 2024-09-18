@@ -10,10 +10,14 @@ export const screenMap = {
   NewTodo: 'NewTodo',
   UpdateTodo: 'UpdateTodo',
   Onboarding: 'Onboarding',
+  ClassDetails: 'ClassDetails',
   SampleCode: 'SampleCode',
+  PaymentScreen: 'PaymentScreen',
   Payment: 'Payment',
   Profile: 'Profile',
   Subscription: 'Subscription',
   Address: 'Address',
   Classes: 'Classes', 
-};
+
+  
+}as const;

@@ -57,7 +57,7 @@ export const signUpSlice = createSlice({
         action: {payload: ProfileItemType; type: string},
       ) => {
         
-        state.profileData = state.profileData.concat(action.payload);
+        state.profileData = state.profileData.concat(...state.profileData ,action.payload);
         //  console.log('identificationNumber---->>test',state.profileData)//
          state.isLoading = false
       },

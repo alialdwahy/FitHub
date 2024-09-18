@@ -34,7 +34,7 @@ const useUserViewModel = () => {
           const profileData = res[1]?.data;
 
           const profile = {
-            id: profileData.id,
+            id: profileData.user.id,
             identificationNumber: profileData.identificationNumber,
             firstName: profileData.firstName,
             lastName: profileData.lastName,
@@ -45,7 +45,7 @@ const useUserViewModel = () => {
             name: profileData.firstName + ' ' + profileData.lastName,
             username: profileData?.createdBy?.username || 'unknown'
           };
-          await AsyncStorage.setItem('id',profileData.id.toString())
+          await AsyncStorage.setItem('id',profileData.user.id.toString())
           // console.log('Profile Object to Dispatch:', profile);
           dispatch(fetchProfileData(profile));
         } else {

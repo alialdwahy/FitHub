@@ -4,4 +4,6 @@ export { default as Home } from './Home/Home';
 export { default as Onboarding } from './Onboarding/Onboarding';
 export {default as ApprovalCenter} from './ApprovalCenter/ApprovalCenter';
 export {default as Address} from './Address/Address';
-export {default as Profile} from './Profile/Profile'
+export {default as Profile} from './Profile/Profile';
+export {default as PaymentScreen} from './Enrollment /Payment'
+export {default as ClasseDetails} from './ClassesFit/ClasseDetails';

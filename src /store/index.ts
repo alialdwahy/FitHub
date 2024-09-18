@@ -6,6 +6,11 @@ import rootReducer from './combineReducers';  // Import rootReducer from where c
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Disable the serializable state invariant middleware
+    }),
+
 });
  
 export type RootState = ReturnType<typeof store.getState>

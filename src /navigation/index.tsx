@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {NavigationContainer} from '@react-navigation/native';
 import {AuthNavigation, MainNavigation, BottomNavigation} from './navigators';
 import {Text, View} from 'react-native';
 import { screenMap } from './screenMap';
 import { Authentication } from '../screens';
+
+
+
 
 const AppContainer = () => {
     const isLogin: Boolean = false;

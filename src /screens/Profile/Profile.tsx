@@ -39,7 +39,7 @@ export default function Profile ({ navigation}: any)  {
   useEffect (() =>  {
     setLoading(true); 
     if (profileData) {
-      setDataAll(profileData[0]); 
+      setDataAll(profileData[1]); 
        setLoading(false); 
     }
   }, [dispatch, profileData]);
@@ -113,7 +113,8 @@ export default function Profile ({ navigation}: any)  {
       const response =  await ServiceMaster.updateProfileData(id,data)
       console.log('API Response:', response);
         // Refetch the profile data after update
-
+        
+        await getAllProfileData();
     setLoading(false);
     Alert.alert('Profile Updated', 'Your profile has been updated successfully!');
      
@@ -136,12 +137,27 @@ export default function Profile ({ navigation}: any)  {
       }
       const response =  await ServiceMaster.deleteProfileData(id)
       console.log('API Response:', response);
-     setLoading(false);
-    Alert.alert('Account Delete', 'Your Account has been Deleted successfully!');
-    navigation.navigate('Authentication');
-     
+      // Check the second element for the success status and message
+      const success = response?.[1]?.success;
+      const message = response?.[1]?.message || 'An unexpected error occurred';
+  
+      if (success) {
+        Alert.alert('Account Delete', message,  [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('Authentication'),
+          },
+        ]);
+       
+      } else {
+        Alert.alert('Error', message);
+      }
+  
+      setLoading(false);
     }catch(error) {
       setLoading(false);
+      Alert.alert('Error', 'An error occurred while deleting your account');
+
     } 
   };
 
@@ -154,6 +170,7 @@ export default function Profile ({ navigation}: any)  {
     const response =  await ServiceMaster.getLogOut()
     console.log('logo test login ------> ', response)  
          setLoading(false);
+         await AsyncStorage.removeItem('token');
           Alert.alert('LogOut Successful', 'You have successfully logged Out!', [
             {
               text: 'OK',

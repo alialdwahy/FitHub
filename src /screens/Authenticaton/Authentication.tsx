@@ -47,7 +47,7 @@ const Authentication = ({ navigation}: any ) => {
           console.log('data test-', dataSend)
           try {
             const response =  await ServiceMaster.getLogIn(dataSend)
-            const data = response[1]; // Adjust if response structure is different
+            const data = response?.[1]; // Adjust if response structure is different
            const token = data?.data?.token;
            await AsyncStorage.setItem('token',token)
             console.log('logo test login ------> ', response)

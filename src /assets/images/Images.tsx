@@ -12,6 +12,7 @@ const splashscreen = require('../images/fithubsplash.json');
 const applogo = require('../images/appfinallogo.png');
 const loading = require('../images/loaders.json');
 
+
 export default {
   museumLogo,
   onboardingOne,
